@@ -4,12 +4,13 @@
 //----------------------------------------
 using System;
 
-public sealed class MultiBagPolicy : IPolicy
+public sealed class RoundRobinPolicy : IPolicy
 {
     private readonly int numBags;
     private readonly Bag<int>[] bags;
+    private int index = 0;
 
-    public MultiBagPolicy(int numBags, int[] elements)
+    public RoundRobinPolicy(int numBags, int[] elements)
     {
         this.numBags = numBags;
         bags = new Bag<int>[numBags];
@@ -21,8 +22,8 @@ public sealed class MultiBagPolicy : IPolicy
 
     public int Sample(IRandom random)
     {
-        var i = random.Next(numBags);
-        var bag = bags[i];
+        var bag = bags[index];
+        index = (index + 1) % numBags;
 
         if (bag.Count < 1) bag.Reset();
         return bag.Take(random.Next(bag.Count));

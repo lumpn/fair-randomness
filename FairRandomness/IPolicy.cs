@@ -1,10 +1,9 @@
 ﻿
 
 using System;
-public class IPolicy
+
+public interface IPolicy
 {
-    public IPolicy()
-    {
-    }
+    int Sample(IRandom random);
 }
 
