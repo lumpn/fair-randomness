@@ -58,13 +58,40 @@ public class FairRandomness
             samples.Add(value);
         }
 
-        var numA = samples.Count(p => p == 1);
-        var numB = samples.Count(p => p == 2);
-        var numC = samples.Count(p => p == 3);
-        var pA = (float)numA / numSamples;
-        var pB = (float)numB / numSamples;
-        var pC = (float)numC / numSamples;
+        var hits = samples.Count(p => p == 1);
+        var propability = (float)hits / numSamples;
 
-        Console.WriteLine("A, B, C: {0:P}, {1:P}, {2:P}", pA, pB, pC);
+        var distribution = new Dictionary<int, int>();
+
+        int distance = 0;
+        for (int i = 0; i < numSamples; i++)
+        {
+            distance++;
+            if (samples[i] == 1)
+            {
+                Increment(distribution, distance);
+                distance = 0;
+            }
+        }
+
+        Console.WriteLine("Distance; Occurence;");
+        int maxDistance = distribution.Keys.Max();
+        for (int i = 0; i < maxDistance; i++)
+        {
+            var value = GetOrFallback(distribution, i, 0);
+            Console.WriteLine("{0}; {1};", i, value);
+        }
+    }
+
+    private static int GetOrFallback(IDictionary<int, int> dict, int key, int fallbackValue)
+    {
+        int value;
+        return dict.TryGetValue(key, out value) ? value : fallbackValue;
+    }
+
+    private static void Increment(IDictionary<int, int> dict, int key)
+    {
+        var value = GetOrFallback(dict, key, 0);
+        dict[key] = value + 1;
     }
 }
