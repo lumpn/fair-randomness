@@ -9,13 +9,16 @@ public sealed class MultiBagPolicy : IPolicy
     private readonly int numBags;
     private readonly Bag<int>[] bags;
 
-    public MultiBagPolicy(int numBags, int[] elements)
+    public MultiBagPolicy(int numBags, int[] elements, IRandom random)
     {
         this.numBags = numBags;
+        var len = elements.Length;
         bags = new Bag<int>[numBags];
         for (int i = 0; i < numBags; i++)
         {
-            bags[i] = new Bag<int>(elements);
+            var bag = new Bag<int>(elements);
+            int numRemove = len * i / numBags;
+            bag.Take(numRemove);
         }
     }
 
@@ -23,8 +26,6 @@ public sealed class MultiBagPolicy : IPolicy
     {
         var i = random.Next(numBags);
         var bag = bags[i];
-
-        if (bag.Count < 1) bag.Reset();
-        return bag.Take(random.Next(bag.Count));
+        return bag.Sample(random);
     }
 }

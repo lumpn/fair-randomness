@@ -37,7 +37,7 @@
     <Compile Include="SingleBagPolicy.cs" />
     <Compile Include="RepeatBagPolicy.cs" />
     <Compile Include="IPolicy.cs" />
-    <Compile Include="BagSequencePolicy.cs" />
+    <Compile Include="SequencePolicy.cs" />
     <Compile Include="RoundRobinPolicy.cs" />
     <Compile Include="BagExtensions.cs" />
   </ItemGroup>

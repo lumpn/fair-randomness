@@ -14,7 +14,7 @@ public sealed class RepeatBagPolicy : IPolicy
         var repeatedElements = new int[len * numRepeats];
         for (int i = 0; i < numRepeats; i++)
         {
-            Array.Copy(elements, 0, repeatedElements, len * i, len);
+            Array.Copy(elements, 0, repeatedElements, i * len, len);
         }
 
         bag = new Bag<int>(repeatedElements);
@@ -22,7 +22,6 @@ public sealed class RepeatBagPolicy : IPolicy
 
     public int Sample(IRandom random)
     {
-        if (bag.Count < 1) bag.Reset();
-        return bag.Take(random.Next(bag.Count));
+        return bag.Sample(random);
     }
 }

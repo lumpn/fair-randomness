@@ -4,7 +4,7 @@
 //----------------------------------------
 using System;
 
-public class SystemRandom : IRandom
+public sealed class SystemRandom : IRandom
 {
     private readonly Random random;
 

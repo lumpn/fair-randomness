@@ -2,7 +2,6 @@
 // MIT License
 // Copyright(c) 2019 Jonas Boetel
 //----------------------------------------
-using System;
 
 public static class BagExtensions
 {

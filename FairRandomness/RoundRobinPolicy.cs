@@ -2,7 +2,6 @@
 // MIT License
 // Copyright(c) 2019 Jonas Boetel
 //----------------------------------------
-using System;
 
 public sealed class RoundRobinPolicy : IPolicy
 {
@@ -13,10 +12,13 @@ public sealed class RoundRobinPolicy : IPolicy
     public RoundRobinPolicy(int numBags, int[] elements)
     {
         this.numBags = numBags;
+        int len = elements.Length;
         bags = new Bag<int>[numBags];
         for (int i = 0; i < numBags; i++)
         {
             bags[i] = new Bag<int>(elements);
+            int numRemove = len * i / numBags;
+            bag.Take(numRemove);
         }
     }
 
@@ -24,8 +26,6 @@ public sealed class RoundRobinPolicy : IPolicy
     {
         var bag = bags[index];
         index = (index + 1) % numBags;
-
-        if (bag.Count < 1) bag.Reset();
-        return bag.Take(random.Next(bag.Count));
+        return bag.Sample(random);
     }
 }
