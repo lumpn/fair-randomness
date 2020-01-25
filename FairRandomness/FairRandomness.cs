@@ -93,12 +93,14 @@ public class FairRandomness
         using (var file = System.IO.File.CreateText("distribution.csv"))
         {
             file.Write("Length; ");
-            foreach (var policy in policies) file.Write("{0} flood; ", policy.Name);
-            foreach (var policy in policies) file.Write("{0} drought; ", policy.Name);
+            foreach (var policy in policies) file.Write("{0}; ", policy.Name);
+            foreach (var policy in policies) file.Write("{0}; ", policy.Name);
             file.WriteLine();
 
-            for (int row = 0; row < numRows; row++)
+            for (int row = 1; row < numRows; row++)
             {
+                file.Write(row);
+                file.Write("; ");
                 for (int col = 0; col < numCols; col++)
                 {
                     file.Write(csv[col, row]);
