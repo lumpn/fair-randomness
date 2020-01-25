@@ -50,6 +50,7 @@ public class FairRandomness
 
         var initRandom = new SystemRandom(seed);
         var policies = new IPolicy[]{
+            new UniformPolicy(elements),
             new SingleBagPolicy(elements),
             new RepeatBagPolicy(1, elements),
             new RepeatBagPolicy(2, elements),
@@ -77,14 +78,38 @@ public class FairRandomness
             new RoundRobinPolicy(6, elements,initRandom),
         };
 
+        int numPolicies = policies.Length;
+        int numCols = numPolicies * 2;
+        int numRows = 100;
+        int floodCol = 0;
+        var csv = new int[numCols, numRows];
         foreach (var policy in policies)
         {
             var random = new SystemRandom(seed);
-            RunExperiment(numSamples, policy, random);
+            RunExperiment(numSamples, policy, random, csv, floodCol, floodCol + numPolicies);
+            floodCol++;
+        }
+
+        using (var file = System.IO.File.CreateText("distribution.csv"))
+        {
+            file.Write("Length; ");
+            foreach (var policy in policies) file.Write("{0} flood; ", policy.Name);
+            foreach (var policy in policies) file.Write("{0} drought; ", policy.Name);
+            file.WriteLine();
+
+            for (int row = 0; row < numRows; row++)
+            {
+                for (int col = 0; col < numCols; col++)
+                {
+                    file.Write(csv[col, row]);
+                    file.Write("; ");
+                }
+                file.WriteLine();
+            }
         }
     }
 
-    private static void RunExperiment(int numSamples, IPolicy policy, IRandom random)
+    private static void RunExperiment(int numSamples, IPolicy policy, IRandom random, int[,] csv, int floodCol, int droughtCol)
     {
         var samples = new List<int>(numSamples);
         for (int run = 0; run < numSamples; run++)
@@ -96,6 +121,7 @@ public class FairRandomness
         // count hits
         var numHits = samples.Count(p => p == 1);
         var probability = (float)numHits / numSamples;
+
         Console.WriteLine("Policy; Samples; Hits; Probability;");
         Console.WriteLine("{0}; {1}; {2}; {3};", policy.Name, numSamples, numHits, probability);
         Console.WriteLine();
@@ -119,6 +145,7 @@ public class FairRandomness
         {
             var value = GetOrFallback(distances, i, 0);
             Console.WriteLine("{0}; {1};", i, value);
+            csv[droughtCol, i] = value;
         }
         Console.WriteLine();
 
@@ -143,6 +170,7 @@ public class FairRandomness
         {
             var value = GetOrFallback(streaks, i, 0);
             Console.WriteLine("{0}; {1};", i, value);
+            csv[floodCol, i] = value;
         }
         Console.WriteLine();
     }

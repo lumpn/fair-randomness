@@ -39,6 +39,7 @@
     <Compile Include="SequencePolicy.cs" />
     <Compile Include="RoundRobinPolicy.cs" />
     <Compile Include="BagExtensions.cs" />
+    <Compile Include="UniformPolicy.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core" />
