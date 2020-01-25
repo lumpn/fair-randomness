@@ -16,7 +16,7 @@ public sealed class SequencePolicy : IPolicy
         bags = new Bag<int>[numBags];
         for (int i = 0; i < numBags; i++)
         {
-            var bag = new Bag<int>(elements);
+            bags[i] = new Bag<int>(elements);
         }
     }
 
@@ -34,11 +34,13 @@ public sealed class SequencePolicy : IPolicy
             var count = bag.Count;
             if (index < count)
             {
-                return bag.Take(index);
+                var value = bag.TakeAt(index);
+                if (bag.Count < 1) bag.Reset();
+                return value;
             }
             index -= count;
         }
 
-        throw new InvalidOperationException("index exceeded total");
+        throw new InvalidOperationException(string.Format("index {0} exceeded total {1}", index, total));
     }
 }

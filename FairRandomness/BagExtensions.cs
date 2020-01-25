@@ -7,7 +7,7 @@ public static class BagExtensions
 {
     public static T Take<T>(this Bag<T> bag, IRandom random)
     {
-        return bag.Take(random.Next(bag.Count));
+        return bag.TakeAt(random.Next(bag.Count));
     }
 
     public static void Take<T>(this Bag<T> bag, int num, IRandom random)

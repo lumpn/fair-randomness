@@ -96,8 +96,8 @@ public class FairRandomness
         // count hits
         var numHits = samples.Count(p => p == 1);
         var probability = (float)numHits / numSamples;
-        Console.WriteLine("Samples; Hits; Probability;");
-        Console.WriteLine("{0}; {1}; {2};", numSamples, numHits, probability);
+        Console.WriteLine("Policy; Samples; Hits; Probability;");
+        Console.WriteLine("{0}; {1}; {2}; {3};", policy.Name, numSamples, numHits, probability);
         Console.WriteLine();
 
         // drought stats
@@ -132,6 +132,7 @@ public class FairRandomness
             if (value != previousValue)
             {
                 Increment(streaks, streakLength);
+                previousValue = value;
                 streakLength = 0;
             }
         }
