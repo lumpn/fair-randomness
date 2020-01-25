@@ -29,6 +29,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="FairRandomness.cs" />
+    <Compile Include="Bag.cs" />
+    <Compile Include="IRandom.cs" />
+    <Compile Include="SystemRandom.cs" />
+    <Compile Include="MultiBagPolicy.cs" />
+    <Compile Include="Sampler.cs" />
+    <Compile Include="SingleBagPolicy.cs" />
+    <Compile Include="RepeatBagPolicy.cs" />
+    <Compile Include="IPolicy.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Core" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
