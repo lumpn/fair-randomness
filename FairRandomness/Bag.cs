@@ -9,6 +9,7 @@ public sealed class Bag<T>
     private T[] elements;
     private int length;
 
+    public int Capacity { get { return elements.Length; } }
     public int Count { get { return length; } }
 
     public Bag(T[] initialElements)
@@ -19,7 +20,7 @@ public sealed class Bag<T>
         length = len;
     }
 
-    public T Take(int index)
+    public T TakeAt(int index)
     {
         int last = length - 1;
         var value = elements[index];

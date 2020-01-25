@@ -5,5 +5,6 @@
 
 public interface IPolicy
 {
+    string Name { get; }
     int Sample(IRandom random);
 }

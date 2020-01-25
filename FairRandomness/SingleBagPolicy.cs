@@ -7,6 +7,8 @@ public sealed class SingleBagPolicy : IPolicy
 {
     private readonly Bag<int> bag;
 
+    public string Name { get { return string.Format("{0}-bag", bag.Capacity); } }
+
     public SingleBagPolicy(int[] elements)
     {
         bag = new Bag<int>(elements);

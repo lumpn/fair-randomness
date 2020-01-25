@@ -48,9 +48,44 @@ public class FairRandomness
             elements[i] = i + 1;
         }
 
-        var random = new SystemRandom(seed);
-        var policy = new SingleBagPolicy(elements);
+        var initRandom = new SystemRandom(seed);
+        var policies = new IPolicy[]{
+            new SingleBagPolicy(elements),
+            new RepeatBagPolicy(1, elements),
+            new RepeatBagPolicy(2, elements),
+            new RepeatBagPolicy(3, elements),
+            new RepeatBagPolicy(4, elements),
+            new RepeatBagPolicy(5, elements),
+            new RepeatBagPolicy(6, elements),
+            new SequencePolicy(1, elements),
+            new SequencePolicy(2, elements),
+            new SequencePolicy(3, elements),
+            new SequencePolicy(4, elements),
+            new SequencePolicy(5, elements),
+            new SequencePolicy(6, elements),
+            new MultiBagPolicy(1, elements, initRandom),
+            new MultiBagPolicy(2, elements, initRandom),
+            new MultiBagPolicy(3, elements, initRandom),
+            new MultiBagPolicy(4, elements, initRandom),
+            new MultiBagPolicy(5, elements, initRandom),
+            new MultiBagPolicy(6, elements, initRandom),
+            new RoundRobinPolicy(1, elements,initRandom),
+            new RoundRobinPolicy(2, elements,initRandom),
+            new RoundRobinPolicy(3, elements,initRandom),
+            new RoundRobinPolicy(4, elements,initRandom),
+            new RoundRobinPolicy(5, elements,initRandom),
+            new RoundRobinPolicy(6, elements,initRandom),
+        };
 
+        foreach (var policy in policies)
+        {
+            var random = new SystemRandom(seed);
+            RunExperiment(numSamples, policy, random);
+        }
+    }
+
+    private static void RunExperiment(int numSamples, IPolicy policy, IRandom random)
+    {
         var samples = new List<int>(numSamples);
         for (int run = 0; run < numSamples; run++)
         {
@@ -58,29 +93,57 @@ public class FairRandomness
             samples.Add(value);
         }
 
-        var hits = samples.Count(p => p == 1);
-        var propability = (float)hits / numSamples;
+        // count hits
+        var numHits = samples.Count(p => p == 1);
+        var probability = (float)numHits / numSamples;
+        Console.WriteLine("Samples; Hits; Probability;");
+        Console.WriteLine("{0}; {1}; {2};", numSamples, numHits, probability);
+        Console.WriteLine();
 
-        var distribution = new Dictionary<int, int>();
-
+        // drought stats
+        var distances = new Dictionary<int, int>();
         int distance = 0;
-        for (int i = 0; i < numSamples; i++)
+        foreach (var value in samples)
         {
             distance++;
-            if (samples[i] == 1)
+            if (value == 1)
             {
-                Increment(distribution, distance);
+                Increment(distances, distance);
                 distance = 0;
             }
         }
 
         Console.WriteLine("Distance; Occurence;");
-        int maxDistance = distribution.Keys.Max();
+        int maxDistance = distances.Keys.Max();
         for (int i = 0; i < maxDistance; i++)
         {
-            var value = GetOrFallback(distribution, i, 0);
+            var value = GetOrFallback(distances, i, 0);
             Console.WriteLine("{0}; {1};", i, value);
         }
+        Console.WriteLine();
+
+        // flood stats
+        var streaks = new Dictionary<int, int>();
+        int previousValue = -1;
+        int streakLength = 0;
+        foreach (var value in samples)
+        {
+            streakLength++;
+            if (value != previousValue)
+            {
+                Increment(streaks, streakLength);
+                streakLength = 0;
+            }
+        }
+
+        Console.WriteLine("Streak; Occurence;");
+        int maxStreak = streaks.Keys.Max();
+        for (int i = 0; i < maxStreak; i++)
+        {
+            var value = GetOrFallback(streaks, i, 0);
+            Console.WriteLine("{0}; {1};", i, value);
+        }
+        Console.WriteLine();
     }
 
     private static int GetOrFallback(IDictionary<int, int> dict, int key, int fallbackValue)

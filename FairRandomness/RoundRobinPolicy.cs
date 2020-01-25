@@ -9,7 +9,9 @@ public sealed class RoundRobinPolicy : IPolicy
     private readonly Bag<int>[] bags;
     private int index = 0;
 
-    public RoundRobinPolicy(int numBags, int[] elements)
+    public string Name { get { return string.Format("{0}-bag {1}-round-robin", bags[0].Capacity, numBags); } }
+
+    public RoundRobinPolicy(int numBags, int[] elements, IRandom random)
     {
         this.numBags = numBags;
         int len = elements.Length;
@@ -18,7 +20,7 @@ public sealed class RoundRobinPolicy : IPolicy
         {
             var bag = new Bag<int>(elements);
             int numRemove = len * i / numBags;
-            bag.Take(numRemove);
+            bag.Take(numRemove, random);
             bags[i] = bag;
         }
     }

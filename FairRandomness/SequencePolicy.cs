@@ -8,6 +8,8 @@ public sealed class SequencePolicy : IPolicy
 {
     private readonly Bag<int>[] bags;
 
+    public string Name { get { return string.Format("{0}-bag {1}-sequence", bags[0].Capacity, bags.Length); } }
+
     public SequencePolicy(int numBags, int[] elements)
     {
         var len = elements.Length;
