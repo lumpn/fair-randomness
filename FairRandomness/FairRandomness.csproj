@@ -33,7 +33,6 @@
     <Compile Include="IRandom.cs" />
     <Compile Include="SystemRandom.cs" />
     <Compile Include="MultiBagPolicy.cs" />
-    <Compile Include="Sampler.cs" />
     <Compile Include="SingleBagPolicy.cs" />
     <Compile Include="RepeatBagPolicy.cs" />
     <Compile Include="IPolicy.cs" />

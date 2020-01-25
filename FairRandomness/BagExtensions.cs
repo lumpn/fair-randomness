@@ -20,7 +20,7 @@ public static class BagExtensions
 
     public static T Sample<T>(this Bag<T> bag, IRandom random)
     {
-        if (bag.Count < 1) bag.Reset;
+        if (bag.Count < 1) bag.Reset();
         return bag.Take(random);
     }
 }

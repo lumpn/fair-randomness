@@ -2,6 +2,7 @@
 // MIT License
 // Copyright(c) 2019 Jonas Boetel
 //----------------------------------------
+using System;
 
 public sealed class SequencePolicy : IPolicy
 {
@@ -9,7 +10,6 @@ public sealed class SequencePolicy : IPolicy
 
     public SequencePolicy(int numBags, int[] elements)
     {
-        this.lastBag = numBags - 1;
         var len = elements.Length;
         bags = new Bag<int>[numBags];
         for (int i = 0; i < numBags; i++)
@@ -37,6 +37,6 @@ public sealed class SequencePolicy : IPolicy
             index -= count;
         }
 
-        throw;
+        throw new InvalidOperationException("index exceeded total");
     }
 }

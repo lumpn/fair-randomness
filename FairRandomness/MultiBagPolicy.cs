@@ -19,6 +19,7 @@ public sealed class MultiBagPolicy : IPolicy
             var bag = new Bag<int>(elements);
             int numRemove = len * i / numBags;
             bag.Take(numRemove);
+            bags[i] = bag;
         }
     }
 

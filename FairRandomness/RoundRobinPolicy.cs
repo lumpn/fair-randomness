@@ -16,9 +16,10 @@ public sealed class RoundRobinPolicy : IPolicy
         bags = new Bag<int>[numBags];
         for (int i = 0; i < numBags; i++)
         {
-            bags[i] = new Bag<int>(elements);
+            var bag = new Bag<int>(elements);
             int numRemove = len * i / numBags;
             bag.Take(numRemove);
+            bags[i] = bag;
         }
     }
 
