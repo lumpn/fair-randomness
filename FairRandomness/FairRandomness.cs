@@ -153,15 +153,13 @@ public class FairRandomness
 
         // flood stats
         var streaks = new Dictionary<int, int>();
-        int previousValue = -1;
         int streakLength = 0;
         foreach (var value in samples)
         {
             streakLength++;
-            if (value != previousValue)
+            if (value != 1)
             {
                 Increment(streaks, streakLength);
-                previousValue = value;
                 streakLength = 0;
             }
         }
