@@ -4,6 +4,7 @@
 //----------------------------------------
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 public class FairRandomness
@@ -49,8 +50,11 @@ public class FairRandomness
         }
 
         var initRandom = new SystemRandom(seed);
-        var policies = new IPolicy[]{
+        var policies = new IPolicy[] {
             new UniformPolicy(elements),
+            new HistoryPolicy(elements, 1, 1),
+            new HistoryPolicy(elements, 4, 4),
+            new HistoryPolicy(elements, 6, 4),
             new SingleBagPolicy(elements),
             new RepeatBagPolicy(1, elements),
             new RepeatBagPolicy(2, elements),
@@ -90,7 +94,7 @@ public class FairRandomness
             floodCol++;
         }
 
-        using (var file = System.IO.File.CreateText("distribution.csv"))
+        using (var file = File.CreateText("distribution.csv"))
         {
             file.Write("Length; ");
             foreach (var policy in policies) file.Write("{0}; ", policy.Name);
